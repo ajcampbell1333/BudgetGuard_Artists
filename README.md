@@ -20,6 +20,8 @@ BudgetGuard is a ComfyUI node designed to help artists optimize costs when using
 
 **No technical knowledge required** - BudgetGuard handles all the complexity of cloud provider authentication and routing so you can focus on your creative work.
 
+**Related Project**: This is the ComfyUI custom node for artists. For the backend deployment tool that TechOps teams use to deploy cloud infrastructure, see **[BudgetGuard TechOps](https://github.com/ajcampbell1333/BudgetGuard_TechOps)**.
+
 ## Quick Start
 
 1. **Add BudgetGuard node** to your workflow (place it between LoadNIM and your generation node)
@@ -85,7 +87,7 @@ BudgetGuard automatically detects if credentials are installed. You'll see one o
 
 **For Small Studios Without TechOps:**
 - You'll need to use the BudgetGuard TechOps Python tool yourself
-- See [BudgetGuard TechOps](../BudgetGuard_TechOps/README.md) for instructions
+- See [BudgetGuard TechOps](https://github.com/ajcampbell1333/BudgetGuard_TechOps) for instructions
 - Run `install-credentials` command to set up your workstation
 
 ## Usage
@@ -151,11 +153,11 @@ BudgetGuard automatically detects if credentials are installed. You'll see one o
 **For Small Studios Without TechOps:**
 - You'll need to use the BudgetGuard TechOps Python tool yourself
 - Deploy NIM instances and install credentials using the TechOps tool
-- See [BudgetGuard TechOps](../BudgetGuard_TechOps/README.md) for detailed instructions
+- See [BudgetGuard TechOps](https://github.com/ajcampbell1333/BudgetGuard_TechOps) for detailed instructions
 
 ### For TechOps Teams
 
-See [BudgetGuard TechOps](../BudgetGuard_TechOps/README.md) for deployment automation tools.
+See [BudgetGuard TechOps](https://github.com/ajcampbell1333/BudgetGuard_TechOps) for deployment automation tools.
 
 ## Development Plan
 
@@ -245,7 +247,7 @@ BudgetGuard will be installed as a ComfyUI custom node. Installation instruction
 
 ## Support
 
-- **Technical questions**: See [BudgetGuard TechOps](../BudgetGuard_TechOps/README.md)
+- **Technical questions**: See [BudgetGuard TechOps](https://github.com/ajcampbell1333/BudgetGuard_TechOps)
 - **Usage questions**: Check this README or open an issue on GitHub
 
 ## License

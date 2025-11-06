@@ -1,0 +1,12 @@
+# BudgetGuard Artists - Python Dependencies
+# 
+# Note: ComfyUI provides most dependencies. This file lists any additional
+# dependencies that BudgetGuard requires beyond ComfyUI's base installation.
+
+# Future dependencies (for cost estimation and API integration):
+# requests>=2.31.0  # For API calls to cloud providers
+# cryptography>=41.0.0  # For credential encryption/decryption
+
+# Currently, BudgetGuard works as a passthrough with no additional dependencies.
+# Dependencies will be added as features are implemented.
+

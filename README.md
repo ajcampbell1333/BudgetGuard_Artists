@@ -163,6 +163,14 @@ See [BudgetGuard TechOps](https://github.com/ajcampbell1333/BudgetGuard_TechOps)
 
 The Artists codebase is simpler than TechOps and can be developed more linearly. Here's the implementation roadmap:
 
+**Note:** Many infrastructure components are provided by [BudgetGuard TechOps](https://github.com/ajcampbell1333/BudgetGuard_TechOps):
+- ✅ **Credential installation** - TechOps installs credentials into ComfyUI backend config
+- ✅ **Endpoint deployment** - TechOps deploys NIM containers to AWS, Azure, GCP
+- ✅ **Endpoint export** - TechOps exports endpoint URLs in config format
+- ✅ **Config file format** - TechOps defines and writes the config file structure
+
+The Artists node primarily needs to **read** from the config file and **use** the endpoints that TechOps provides.
+
 ### Core Node & GUI ✅ SKELETAL IMPLEMENTATION COMPLETE
 - [x] Create base ComfyUI custom node structure (Python)
 - [x] Implement input/output passthrough to NIM nodes
@@ -174,21 +182,21 @@ The Artists codebase is simpler than TechOps and can be developed more linearly.
 - [x] Implement credential status detection (check localStorage for credentials)
 - [x] Display status message: "✓ Server Credentials Found" or "⚠ Server Credentials Not Found"
 
-### Mode Toggle & State Management
-- [ ] Create simplified GUI with title "BudgetGuard Settings"
-- [ ] **Main GUI Layout:**
-  - Title: "BudgetGuard Settings"
-  - DAILY SPEND button (below title)
-  - SPENT TODAY display (bordered div, next to or below DAILY SPEND button)
-  - Three-mode toggle: MANUAL / LOWEST PRICE / LOCAL
-  - Cloud Nodes button (opens popover dialog)
-- [ ] Implement data model to track all BudgetGuard nodes in graph
-- [ ] Create per-node state storage (node ID → provider selection)
-- [ ] Implement MANUAL mode: Save and restore per-node provider selections
-- [ ] Implement LOWEST PRICE mode: Calculate and apply lowest-cost provider per node
-- [ ] Add client-side state persistence (localStorage)
-- [ ] Implement mode switching logic (MANUAL ↔ LOWEST PRICE)
-- [ ] Add state restoration on graph load/workflow open
+### Mode Toggle & State Management ✅ PARTIALLY COMPLETE
+- [x] Create simplified GUI with title "BudgetGuard Settings" (UI exists)
+- [x] **Main GUI Layout:** (UI structure exists, needs logic)
+  - [x] Title: "BudgetGuard Settings"
+  - [x] DAILY SPEND button (UI placeholder exists)
+  - [x] SPENT TODAY display (UI placeholder exists, shows "$0.00")
+  - [x] Three-mode toggle: MANUAL / LOWEST PRICE / LOCAL (UI exists, buttons work visually)
+  - [x] Cloud Nodes button (UI placeholder exists)
+- [x] Implement data model to track all BudgetGuard nodes in graph (basic tracking exists)
+- [x] Create per-node state storage (node ID → provider selection) (structure exists in GUI)
+- [x] Add client-side state persistence (localStorage) (save/load functions exist)
+- [ ] **Artists needs**: Implement MANUAL mode logic: Save and restore per-node provider selections (UI saves state, but doesn't sync to actual nodes)
+- [ ] **Artists needs**: Implement LOWEST PRICE mode logic: Calculate and apply lowest-cost provider per node (requires cost estimation first)
+- [ ] **Artists needs**: Implement mode switching logic (MANUAL ↔ LOWEST PRICE ↔ LOCAL) - currently only saves state, doesn't change behavior
+- [ ] **Artists needs**: Add state restoration on graph load/workflow open (load function exists but may need refinement)
 
 ### Cost Estimation & API Integration
 - [ ] Integrate AWS Pricing API (with authentication from localStorage)
@@ -204,18 +212,30 @@ The Artists codebase is simpler than TechOps and can be developed more linearly.
 - [ ] Implement daily spend tracking (reset at midnight)
 - [ ] Update SPENT TODAY display in real-time
 
-### Provider Routing
-- [ ] Implement endpoint routing based on provider selection
-- [ ] Switch NIM endpoint URL based on selected provider (cloud or localhost)
-- [ ] Route NIM API calls to configured endpoint
-- [ ] Maintain NIM API compatibility regardless of provider choice
-- [ ] Handle local routing (localhost Docker containers)
+### Provider Routing ✅ ENDPOINT INFRASTRUCTURE PROVIDED BY TECHOPS
+- [x] **TechOps provides**: Endpoint deployment to AWS, Azure, GCP (via TechOps GUI)
+- [x] **TechOps provides**: Endpoint export functionality (`export.py`)
+- [x] **TechOps provides**: Endpoint URLs in config file format (`nim_endpoints` structure)
+- [ ] **Artists needs**: Read endpoint URLs from ComfyUI backend config (`budgetguard_backend_config.json`)
+- [ ] **Artists needs**: Implement endpoint routing based on provider selection
+- [ ] **Artists needs**: Switch NIM endpoint URL based on selected provider (cloud or localhost)
+- [ ] **Artists needs**: Route NIM API calls to configured endpoint
+- [ ] **Artists needs**: Maintain NIM API compatibility regardless of provider choice
+- [ ] **Artists needs**: Handle local routing (localhost Docker containers)
 
-### Credential Reading
-- [ ] Read credentials from ComfyUI backend config on startup
-- [ ] Store credentials in localStorage (encrypted)
-- [ ] Validate credentials on startup
-- [ ] Handle credential status display
+### Credential Reading ✅ INFRASTRUCTURE PROVIDED BY TECHOPS
+- [x] **TechOps provides**: Credential installation tool (`install_credentials.py`) - writes to `ComfyUI/budgetguard/budgetguard_backend_config.json`
+- [x] **TechOps provides**: Config file format defined (see [BudgetGuard TechOps](https://github.com/ajcampbell1333/BudgetGuard_TechOps))
+- [x] **TechOps provides**: Credential encryption before writing to config
+- [ ] **Artists needs**: Read credentials from ComfyUI backend config on startup (`budgetguard_backend_config.json`)
+- [ ] **Artists needs**: Store credentials in localStorage (encrypted) after reading from config
+- [ ] **Artists needs**: Validate credentials on startup
+- [x] **Artists has**: Credential status display UI (placeholder exists)
+- [ ] **Artists needs**: Implement credential status detection (check ComfyUI backend config for credentials)
+  - Read `ComfyUI/budgetguard/budgetguard_backend_config.json` on startup
+  - Detect if credentials exist and are valid
+  - Update GUI status message: "✓ Server Credentials Found" or "⚠ Server Credentials Not Found"
+  - Currently UI placeholder exists but reads from localStorage instead of actual config file
 
 ### Daily Spend Tracking (Main GUI Feature)
 - [ ] Add DAILY SPEND button below title in **main BudgetGuard Settings GUI** (not in Cloud Nodes popover)
@@ -230,16 +250,19 @@ The Artists codebase is simpler than TechOps and can be developed more linearly.
 - [ ] Show cost breakdown by provider, by workflow, by container
 - [ ] **Note**: This is a main GUI feature, separate from Cloud Nodes popover
 
-### Cloud Nodes Management (Container Toggle)
-- [ ] Add "Cloud Nodes" button to BudgetGuard Settings GUI
-- [ ] Create popover dialog showing all deployed nodes with credentials
-- [ ] Implement checkbox grid (Node × Provider) showing ON/OFF status
-- [ ] Show AWS, Azure, and GCP containers with ON/OFF toggle checkboxes
-- [ ] Display cost information: ~$0.04/hour at idle, 60 second startup time
-- [ ] Implement API calls to start/stop containers (AWS/Azure/GCP)
-- [ ] Add status polling to update container state in real-time
-- [ ] Show startup progress indicator (60 second countdown)
-- [ ] Update SPENT TODAY when containers start/stop (idle cost tracking)
+### Cloud Nodes Management (Container Toggle) ✅ INFRASTRUCTURE PROVIDED BY TECHOPS
+- [x] **TechOps provides**: Container deployment to AWS (ECS on EC2), Azure (AKS), GCP (GKE)
+- [x] **TechOps provides**: Container start/stop capability (via deployment scaling)
+- [x] **TechOps provides**: Endpoint URLs for all deployed containers
+- [x] **Artists has**: "Cloud Nodes" button in GUI (placeholder exists)
+- [ ] **Artists needs**: Create popover dialog showing all deployed nodes with credentials
+- [ ] **Artists needs**: Implement checkbox grid (Node × Provider × GPU Tier) showing ON/OFF status
+- [ ] **Artists needs**: Show AWS, Azure, and GCP containers with ON/OFF toggle checkboxes
+- [ ] **Artists needs**: Display cost information: ~$0.04/hour at idle, 60 second startup time
+- [ ] **Artists needs**: Implement API calls to start/stop containers (AWS ECS/Azure AKS/GCP GKE APIs)
+- [ ] **Artists needs**: Add status polling to update container state in real-time
+- [ ] **Artists needs**: Show startup progress indicator (60 second countdown)
+- [ ] **Artists needs**: Update SPENT TODAY when containers start/stop (idle cost tracking)
 
 ## Installation
 
